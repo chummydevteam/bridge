@@ -202,8 +202,6 @@ public final class Response implements AsResults, Serializable {
                 .responseConverter(contentType)
                 .convertObject(this, cls);
         final long diff = System.currentTimeMillis() - start;
-        Log.d(this, "Response conversion to class %s took %d milliseconds (%d seconds).",
-                cls.getName(), diff, diff / 1000);
         return result;
     }
 
@@ -222,8 +220,6 @@ public final class Response implements AsResults, Serializable {
                 .responseConverter(contentType)
                 .convertArray(this, cls);
         final long diff = System.currentTimeMillis() - start;
-        Log.d(this, "Response conversion to array of class %s took %d milliseconds (%d seconds).",
-                cls.getName(), diff, diff / 1000);
         return result;
     }
 
