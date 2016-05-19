@@ -137,7 +137,6 @@ public final class Request implements Serializable {
                 responseCode = conn.getResponseCode();
                 responseMessage = conn.getResponseMessage();
                 responseHeaders = new HashMap<>(conn.getHeaderFields());
-                Log.d(Request.this, "%s %s status: %s %s", Method.name(method()), url(), responseCode, responseMessage);
 
                 try {
                     Log2.d(this, "Preparing to receive data...");
@@ -184,8 +183,6 @@ public final class Request implements Serializable {
                         if (totalAvailable == 0)
                             mBuilder.mContext.fireProgress(Request.this, 100, 100);
                         data = bos.toByteArray();
-                        Log.d(Request.this, "Read %d bytes from the %s %s response.", data != null ?
-                                data.length : 0, Method.name(method()), url());
                     }
                 } finally {
                     BridgeUtil.closeQuietly(is);
@@ -203,7 +200,6 @@ public final class Request implements Serializable {
                     if (locHeader.size() > 0) {
                         if (Bridge.config().mAutoFollowRedirects) {
                             // Follow redirect
-                            Log.d(Request.this, "Following redirect: " + locHeader.get(0));
                             mBuilder.prepareRedirect(locHeader.get(0));
                             return makeRequest(); // chain redirected request
                         } else {
@@ -212,7 +208,6 @@ public final class Request implements Serializable {
                     }
                 }
 
-                Log.d(Request.this, "%s %s request completed successfully.", Method.name(method()), url());
             } catch (Exception fnf) {
                 Log.e(Request.this, "Processing exception... %s, %s", fnf.getClass().getName(), fnf.getMessage());
                 if (fnf instanceof BridgeException) {
@@ -262,7 +257,6 @@ public final class Request implements Serializable {
     private void checkCancelled() throws BridgeException {
         if (isCancelled) {
             BridgeException ex = new BridgeException(this);
-            Log.d(this, ex.getMessage());
             throw ex;
         }
     }

@@ -26,11 +26,9 @@ public class Bridge implements Serializable {
             final String key = CallbackStack.createKey(request);
             CallbackStack cbs = mRequestMap.get(key);
             if (cbs != null) {
-                Log.d(this, "Pushing callback to EXISTING stack for %s", key);
                 cbs.push(callback, request);
                 return false;
             } else {
-                Log.d(this, "Pushing callback to NEW stack for %s", key);
                 cbs = new CallbackStack();
                 cbs.push(callback, request);
                 mRequestMap.put(key, cbs);
@@ -52,20 +50,16 @@ public class Bridge implements Serializable {
     protected void fireCallbacks(final Request request, final Response response, final BridgeException error) {
         synchronized (LOCK) {
             final String key = CallbackStack.createKey(request);
-            Log.d(this, "Attempting to fire callbacks for %s", key);
             if (mRequestMap == null) {
-                Log.d(this, "Request map is null, can't fire callbacks.");
                 return;
             }
             final CallbackStack cbs = mRequestMap.get(key);
             if (cbs != null) {
-                Log.d(this, "Firing %d callback(s) for %s", cbs.size(), key);
                 cbs.fireAll(response, error);
                 mRequestMap.remove(key);
                 if (mRequestMap.size() == 0)
                     mRequestMap = null;
             } else {
-                Log.d(this, "No callback stack found for %s", key);
             }
         }
     }
@@ -133,7 +127,6 @@ public class Bridge implements Serializable {
                 mConfig = null;
             }
             cancelAll().commit();
-            Log.d(mBridge, "Bridge singleton was destroyed.");
         }
     }
 }

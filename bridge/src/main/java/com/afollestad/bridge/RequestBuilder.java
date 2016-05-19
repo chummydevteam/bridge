@@ -55,7 +55,6 @@ public final class RequestBuilder implements AsResultsExceptions, Serializable {
         if (!url.startsWith("http") && cf.mHost != null)
             url = cf.mHost + url;
 
-        Log.d(this, "%s %s", Method.name(method), url);
         mUrl = url;
         mMethod = method;
 
@@ -116,7 +115,6 @@ public final class RequestBuilder implements AsResultsExceptions, Serializable {
     }
 
     public RequestBuilder body(@Nullable String textBody) {
-        Log.d(this, "Body: %s", textBody);
         if (textBody == null) {
             mBody = null;
             return this;
@@ -195,8 +193,6 @@ public final class RequestBuilder implements AsResultsExceptions, Serializable {
             RequestConverter converter = Bridge.config().requestConverter(contentType);
             mBody = converter.convertObject(object, this);
             final long diff = System.currentTimeMillis() - start;
-            Log.d(this, "Request conversion took %dms (%d seconds) for object of type %s.",
-                    diff, diff / 1000, object.getClass().getName());
         }
         return this;
     }
@@ -211,8 +207,6 @@ public final class RequestBuilder implements AsResultsExceptions, Serializable {
             RequestConverter converter = Bridge.config().requestConverter(contentType);
             mBody = converter.convertArray(objects, this);
             final long diff = System.currentTimeMillis() - start;
-            Log.d(this, "Request conversion took %dms (%d seconds) for array of %s objects.",
-                    diff, diff / 1000, objects[0].getClass().getName());
         }
         return this;
     }
@@ -227,8 +221,6 @@ public final class RequestBuilder implements AsResultsExceptions, Serializable {
             RequestConverter converter = Bridge.config().requestConverter(contentType);
             mBody = converter.convertList(objects, this);
             final long diff = System.currentTimeMillis() - start;
-            Log.d(this, "Request conversion took %dms (%d seconds) for list of %s objects.",
-                    diff, diff / 1000, objects.get(0).getClass().getName());
         }
         return this;
     }
